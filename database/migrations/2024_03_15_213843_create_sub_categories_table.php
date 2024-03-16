@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->index();
-            $table->unsignedInteger('price');
-            $table->date('best_before_date'); 
-            $table->date('out_date')->nullable();
-            $table->string('memo', 500)->nullable();
+            $table->string('name', 100);
+            $table->boolean('is_managed'); // true(1)有効、false(0)無効
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('sub_categories');
     }
 };
