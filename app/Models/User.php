@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\FamilyGroup;
 
 class User extends Authenticatable
 {
@@ -42,4 +43,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // Userモデルを作成時に同時にFamilyGroupを作成、設定
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::creating(function ($user) {
+            $familyGroup = FamilyGroup::create();
+            $user->family_group_id = $familyGroup->id; 
+        });
+    }
+    
+    // family_groupsとの連携
+    public function familyGroup()
+    {
+        return $this->belongsTo(FamilyGroup::class);
+    }
+    
 }

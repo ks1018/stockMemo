@@ -25,18 +25,33 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>名前</th>
-                                <th>種別</th>
-                                <th>詳細</th>
+                                <th>中カテゴリ</th>
+                                <th>品名</th>
+                                <th>賞味期限</th>
+                                <th>購入価格</th>
+                                <th>購入店</th>
+                                <th>メモ</th>
+                                <th>購入日</th>
+                                <th>出庫日</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($items as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
+                                    <td>{{ $item->sub_category_id }}</td>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->type }}</td>
-                                    <td>{{ $item->detail }}</td>
+                                    <td>{{ $item->best_before_date }}</td>
+                                    <td>{{ $item->price }}</td>
+                                    <td>{{ $item->shop_id }}</td>
+                                    <td>{{ $item->memo }}</td>
+                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->out_date }}</td>
+                                    <td>
+                                        <!-- 編集ボタン -->
+                                        <a href="" class="btn btn-dark btn-sm">編集</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

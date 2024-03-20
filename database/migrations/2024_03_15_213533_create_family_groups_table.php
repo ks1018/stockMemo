@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('family_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('group_name', 100);
+            $table->string('group_name', 100)->nullable();
             $table->timestamps();
         });
     }

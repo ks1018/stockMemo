@@ -295,6 +295,13 @@ return [
             'url'  => 'items',
             'icon' => 'fas fa-gamepad',
         ],
+        // 以下5行は上をコピペ。ホーム画面のnavの内容ですよ。と講師に教えてもらい、一緒に表示を変更してみた。
+        [ 
+            'text' => '商品一覧',
+            'url'  => 'items',
+            'icon' => 'fas fa-gamepad',
+        ],
+
 
         // AdminLTEデフォルト
         /*
