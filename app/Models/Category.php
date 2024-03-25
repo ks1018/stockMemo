@@ -11,6 +11,13 @@ class Category extends Model
 
     protected $fillable = [
         'name',
+        'family_group_id',
     ];
+
+    // family_groupsとの連携
+    public function familyGroup()
+    {
+        return $this->belongsTo(FamilyGroup::class);
+    }
 
 }

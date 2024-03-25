@@ -14,4 +14,11 @@ class SubCategory extends Model
         'name',
         'is_managed',
     ];
+
+    // categoryとの連携
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    
 }

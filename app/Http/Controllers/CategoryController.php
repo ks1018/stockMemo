@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
@@ -22,7 +23,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        // return "This is the create method of CategoryController";
+        $categories = Category::all();
+
+        return view('category\createCategory',compact('categories'));
     }
 
     /**
@@ -30,7 +34,23 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'category_name' => 'required|max:100',
+        ]);
+
+        // ログインユーザーのfamily_group_idを取得
+        $family_group_id = auth()->user()->family_group_id;
+
+        // テーブル内に同じカラムがあるかチェックして、なければcreateに進む 後で実装
+        // Rule::unique('category', 'category_name')->where('family_group_id', $family_gropu_id);
+
+        // カテゴリ登録
+        Category::create([
+            'name' => $request->category_name,
+            'family_group_id' => $family_group_id
+        ]);
+
+        return redirect()->route('categories.create');
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +26,16 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Route::prefix('items')->group(function () {
     Route::get('/', [App\Http\Controllers\ItemController::class, 'index']);
     Route::get('/add', [App\Http\Controllers\ItemController::class, 'add']);
-    Route::post('/add', [App\Http\Controllers\ItemController::class, 'add']);
+    Route::post('/add', [App\Http\Controllers\ItemController::class, 'add'])->name('items.store');
+
 });
 
+// カテゴリ
+// Route::get('categories/add',[App\Http\Controllers\CategoryController::class, 'add']);
+
 Route::resource('categories', CategoryController::class);
+Route::resource('subCategories', SubCategoryController::class);
+
+// 大カテゴリから中カテゴリをgetするAJAXのためのルート
+Route::post('getsubcategories', [SubCategoryController::class, 'getsubcategories']);
+

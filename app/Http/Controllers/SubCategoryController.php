@@ -30,7 +30,18 @@ class SubCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|max:100',
+        ]);
+
+        // 中カテゴリ登録
+        SubCategory::create([
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'is_managed' => true, // is_managedをデフォルトでtrueとして登録
+        ]);
+
+        return redirect()->route('categories.create');
     }
 
     /**
@@ -63,5 +74,16 @@ class SubCategoryController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getSubCategories(Request $request) 
+    {
+        $category_id = $request->input('category_id');
+        
+        // カテゴリidに基づいて中カテゴリを取得
+        $sub_categories = SubCategory::where('category_id', $category_id)->get();
+
+        // JSON形式で中カテゴリを返す
+        return response()->json($sub_categories);
     }
 }

@@ -44,14 +44,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // Userモデルを作成時に同時にFamilyGroupを作成、設定
+    // Userモデルを作成時に同時にFamilyGroup Categoryを作成、設定
     protected static function boot()
     {
         parent::boot();
         
         static::creating(function ($user) {
             $familyGroup = FamilyGroup::create();
+            // dd($familyGroup);
             $user->family_group_id = $familyGroup->id; 
+
+            $categories = ['食品', '日用品', '常備薬'];
+            foreach ($categories as $categoryName) {
+                $newCategory = Category::create([
+                    'name' => $categoryName,
+                    'family_group_id' => $familyGroup->id
+                ]);
+            }
         });
     }
     
@@ -60,5 +69,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(FamilyGroup::class);
     }
-    
+
+    // family_group_idに関連したcategoryデータのみ取得
+    public function getFilteredCategories($categories)
+    {
+        $userFamilyGroupId = $this->family_group_id;
+        $filteredCategories = $categories->where('family_group_id', $userFamilyGroupId);
+
+        return $filteredCategories;
+    }
 }

@@ -291,17 +291,22 @@ return [
 
     'menu' => [
         [
-            'text' => '商品一覧',
+            'text' => 'ストック一覧',
             'url'  => 'items',
-            'icon' => 'fas fa-gamepad',
+            'icon' => 'fas fa-list-ul',
         ],
-        // 以下5行は上をコピペ。ホーム画面のnavの内容ですよ。と講師に教えてもらい、一緒に表示を変更してみた。
-        [ 
-            'text' => '商品一覧',
-            'url'  => 'items',
-            'icon' => 'fas fa-gamepad',
+        [
+            'text' => 'カテゴリ作成',
+            'url' => 'categories/create',
+            'icon' => 'fas fa-plus-square',
+            'icon_color' => 'primary',
         ],
-
+        [
+            'text' => 'ストック品登録',
+            'url' => 'items/add',
+            'icon' => 'fas fa-plus-square',
+            'icon_color' => 'primary',
+        ],
 
         // AdminLTEデフォルト
         /*

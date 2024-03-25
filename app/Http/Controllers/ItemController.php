@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
+use App\Models\Category;
+use App\Models\SubCategory;
+use App\Models\Shop;
+
 
 class ItemController extends Controller
 {
@@ -23,7 +27,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        // 商品一覧取得
+// 商品一覧取得
         $items = Item::all();
 
         return view('item.index', compact('items'));
@@ -38,20 +42,40 @@ class ItemController extends Controller
         if ($request->isMethod('post')) {
             // バリデーション
             $this->validate($request, [
-                'name' => 'required|max:100',
+                'item_name' => 'required|max:100',
+                'shop_name' => 'required|max:100',
             ]);
+
+            // group_idを取得
+            $group_id = Auth::user()->group_id;
+            dd($group_id);
+
+            // 購入店を取得または作成
+            $shop = Shop::firstOrCreate([
+                'name' => $request->shop_name,
+                'group_id' => $group_id
+            ]);
+
+            // 作成した店舗情報からidを取得
+            $shop_id = $shop->id;
 
             // 商品登録
             Item::create([
-                'user_id' => Auth::user()->id,
-                'name' => $request->name,
-                'type' => $request->type,
-                'detail' => $request->detail,
+                // 'user_id' => Auth::user()->id,
+                'name' => $request->item_name,
+                'price' => $request->price,
+                'best_before_date' => $request->best_before_date,
+                'memo' => $request->memo,
+                'shop_id' => $shop_id,
+                'sub_category_id' => $request->sub_category_id,
             ]);
 
             return redirect('/items');
         }
 
-        return view('item.add');
+        $categories = Category::all();
+        $subCategories = SubCategory::all();
+
+        return view('item.add', compact('categories', 'subCategories'));
     }
 }

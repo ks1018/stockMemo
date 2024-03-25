@@ -12,10 +12,11 @@ class Item extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
         'name',
-        'type',
-        'detail',
+        'price',
+        'best_before_date',
+        'out_date',
+        'memo',
     ];
 
     /**
@@ -34,5 +35,9 @@ class Item extends Model
     protected $casts = [
     ];
 
-    
+    // subcategryとのリレーション
+    public function subcategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
 }
