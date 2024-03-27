@@ -17,6 +17,8 @@ class Item extends Model
         'best_before_date',
         'out_date',
         'memo',
+        'shop_id',
+        'sub_category_id',
     ];
 
     /**
@@ -40,4 +42,11 @@ class Item extends Model
     {
         return $this->belongsTo(SubCategory::class);
     }
+
+        // shopとのリレーション
+        public function shop()
+        {
+            return $this->belongsTo(Shop::class,'shop_id', 'id');
+        }
+    
 }

@@ -38,6 +38,8 @@
                             <label for="sub_category">中カテゴリ</label>
                             <select name="sub_category" id="sub_category" class="form-select form-control">
                             </select>
+                            <!-- 選択された中カテゴリのidをPOSTするためのhidden input -->
+                            <input type="hidden" name="selected_sub_category_id" id="selected_sub_category_id" value="">
                         <div class="form-group">
                             <label for="item">品名</label>
                             <input type="text" class="form-control" id="item" name="item_name" placeholder="品名、銘柄">
@@ -77,26 +79,36 @@
     document.getElementById('category').addEventListener('change', function() {
     var categoryId = this.value;
     
-    // AJAXリクエストを送信して中カテゴリを取得
-    $.ajax({
-        url: '/getsubcategories',
-        method: 'POST',
-        data: {
-            category_id: categoryId,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(response) {
-            var subCategorySelect = document.getElementById('sub_category');
-            subCategorySelect.innerHTML = '<option selected>中カテゴリを選択してください。</option>';
-            
-            response.forEach(function(subCategory) {
-                var option = document.createElement('option');
-                option.value = subCategory.id;
-                option.innerText = subCategory.name;
-                subCategorySelect.appendChild(option);
-            });
-        }
+        // AJAXリクエストを送信して中カテゴリを取得
+        $.ajax({
+            url: '/getsubcategories',
+            method: 'POST',
+            data: {
+                category_id: categoryId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                var subCategorySelect = document.getElementById('sub_category');
+                subCategorySelect.innerHTML = '<option selected>中カテゴリを選択してください。</option>';
+                
+                response.forEach(function(subCategory) {
+                    var option = document.createElement('option');
+                    option.value = subCategory.id;
+                    option.innerText = subCategory.name;
+                    subCategorySelect.appendChild(option);
+                });
+            }
+        });
     });
-});
+
+    // 中カテゴリが選択されたときにそのidをhidden inputに設定する
+    document.getElementById('sub_category').addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
+        var selectedOptionId = selectedOption.value;
+        document.getElementById('selected_sub_category_id').value = selectedOptionId;
+
+        console.log(document.getElementById('selected_sub_category_id').value);
+    });
+
 </script>
 @stop

@@ -24,7 +24,7 @@
                 <div class="card-header">
                     <h3 class="card-title">大カテゴリ作成</h3>
                 </div>
-                <form method="POST" action="{{ route('categories.create')}}">
+                <form method="POST" action="{{ route('categories.store') }}">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">

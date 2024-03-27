@@ -27,8 +27,11 @@ class ItemController extends Controller
      */
     public function index()
     {
-// 商品一覧取得
-        $items = Item::all();
+        // 商品一覧取得
+        // $items = Item::all();
+
+        // 出庫日がnullの商品一覧取得,関連するShop情報も含む
+        $items = Item::whereNull('out_date')->with('shop')->get();
 
         return view('item.index', compact('items'));
     }
@@ -47,17 +50,20 @@ class ItemController extends Controller
             ]);
 
             // group_idを取得
-            $group_id = Auth::user()->group_id;
-            dd($group_id);
+            $family_group_id = Auth::user()->family_group_id;
+            // dd($family_group_id);
 
             // 購入店を取得または作成
             $shop = Shop::firstOrCreate([
                 'name' => $request->shop_name,
-                'group_id' => $group_id
+                'family_group_id' => $family_group_id
             ]);
+            // dd($request->shop_name);
+
 
             // 作成した店舗情報からidを取得
             $shop_id = $shop->id;
+            // dd($shop_id);
 
             // 商品登録
             Item::create([
@@ -78,4 +84,21 @@ class ItemController extends Controller
 
         return view('item.add', compact('categories', 'subCategories'));
     }
+
+    // 商品編集画面を表示 ToDo　itemのadd.blade.phpをコピーして、編集画面を作成する
+    public function edit(Item $item) 
+    {
+        return view('/item/itemEdit', compact('item'));
+    }
+
+    // 出庫処理
+    public function handleStockOut($id)
+    {
+        $item = Item::find($id);
+
+        // 出庫日を今日の日付に設定
+        $item->out_date = date('Y_m_d');
+        $item->save();
+    }
+
 }

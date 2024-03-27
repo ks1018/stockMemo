@@ -43,14 +43,19 @@
                                     <td>{{ $item->sub_category_id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->best_before_date }}</td>
-                                    <td>{{ $item->price }}</td>
-                                    <td>{{ $item->shop_id }}</td>
+                                    <td>{{ $item->price }}円</td>
+                                    <td>{{ $item->shop->name }}</td>
                                     <td>{{ $item->memo }}</td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->created_at->format('Y-m-d') }}</td>
                                     <td>{{ $item->out_date }}</td>
                                     <td>
                                         <!-- 編集ボタン -->
-                                        <a href="" class="btn btn-dark btn-sm">編集</a>
+                                        <a href="{{ url('/items/' . $item->id . '/edit') }}" class="btn btn-outline-dark btn-sm">編集</a>
+                                        <!-- 出庫ボタン -->
+                                        <form id="stockOutForm" action="{{ route('items.stock-out', ['id' => $item->id]) }}" method="POST">
+                                            @csrf
+                                            <button id="stockOutButton" class="btn btn-outline-success btn-sm">出庫</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -66,4 +71,9 @@
 @stop
 
 @section('js')
+    <script>
+    document.getElementById('stockOutButton').addEventListener('click', function() {
+        document.getElementById('stockOutForm').submit();
+    });
+    </script>
 @stop
