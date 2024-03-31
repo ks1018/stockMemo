@@ -24,7 +24,7 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>中カテゴリ</th>
                                 <th>品名</th>
                                 <th>賞味期限</th>
@@ -39,8 +39,8 @@
                         <tbody>
                             @foreach ($items as $item)
                                 <tr>
-                                    <td>{{ $item->id }}</td>
-                                    <td>{{ $item->sub_category_id }}</td>
+                                    <!-- <td>{{ $item->id }}</td> -->
+                                    <td>{{ $item->subcategory->name}}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->best_before_date }}</td>
                                     <td>{{ $item->price }}円</td>
@@ -48,11 +48,11 @@
                                     <td>{{ $item->memo }}</td>
                                     <td>{{ $item->created_at->format('Y-m-d') }}</td>
                                     <td>{{ $item->out_date }}</td>
-                                    <td>
+                                    <td class="d-flex">
                                         <!-- 編集ボタン -->
                                         <a href="{{ url('/items/' . $item->id . '/edit') }}" class="btn btn-outline-dark btn-sm">編集</a>
                                         <!-- 出庫ボタン -->
-                                        <form id="stockOutForm" action="{{ route('items.stock-out', ['id' => $item->id]) }}" method="POST">
+                                        <form id="stockOutForm" action="{{ route('items.stock-out', ['id' => $item->id]) }}" method="POST" class="ml-2">
                                             @csrf
                                             <button id="stockOutButton" class="btn btn-outline-success btn-sm">出庫</button>
                                         </form>

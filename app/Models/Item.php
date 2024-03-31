@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SubCategory;
 
 class Item extends Model
 {
@@ -40,7 +41,8 @@ class Item extends Model
     // subcategryとのリレーション
     public function subcategory()
     {
-        return $this->belongsTo(SubCategory::class);
+        // subcategory_id　でデータを探そうとするから、カラム名が違う時は引数に、カラム名をいれる
+        return $this->belongsTo(SubCategory::class,"sub_category_id");
     }
 
         // shopとのリレーション

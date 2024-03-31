@@ -1,11 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'ストック品登録')
+@section('title', 'ストック品編集')
 
 @section('content_header')
-    <h1>ストック品登録</h1>
+    <h1>ストック品編集</h1>
 @stop
 
+<!-- ここに編集ボタンで選ばれたitemデータが表示されるようにする -->
 @section('content')
     <div class="row">
         <div class="col-md-10">
@@ -20,8 +21,11 @@
             @endif
 
             <div class="card card-primary">
-            <form method="POST" action="{{ route('items.store')}}">
+            <form method="POST" action="{{ url('/items/'. $item->id) }}">
                     @csrf
+                    <!-- PUTメソッドを指定するためのディレクティブ -->
+                    @method('PUT')
+                    
                     <div class="card-body">
                         <div class="form-group">
                             <label for="category">大カテゴリ</label>
@@ -38,7 +42,7 @@
                             <label for="sub_category">中カテゴリ</label>
                             <select name="sub_category_id" id="sub_category" class="form-select form-control">
                             </select>
-                      
+
                         <div class="form-group">
                             <label for="item">品名</label>
                             <input type="text" class="form-control" id="item" name="item_name" placeholder="品名、銘柄">

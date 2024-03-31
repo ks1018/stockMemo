@@ -30,9 +30,32 @@ class ItemController extends Controller
         // 商品一覧取得
         // $items = Item::all();
 
-        // 出庫日がnullの商品一覧取得,関連するShop情報も含む
-        $items = Item::whereNull('out_date')->with('shop')->get();
+        // 出庫日がnullの商品一覧取得
+        $user = auth()->user();
+        // dd($user);
+        $family_group_id = $user->family_group_id;
+        // dd($family_group_id);
+        $categories = Category::where('family_group_id',$family_group_id)->get();
+        // dd($categories);
+        $category_ids = $categories->pluck('id')->toArray();
+        // dd($category_ids);
+        $subCategories = SubCategory::whereIn('category_id',$category_ids)->get();
+        // dd($subCategories);
+        $subcategory_ids = $subCategories->pluck('id')->toArray();
+        // dd($subcategory_ids);
+        
+        $items = Item::whereHas('SubCategory', function($query) use ($subcategory_ids) {
+            $query->whereIn('sub_category_id', $subcategory_ids)->whereNull('out_date');
+        })->with('shop')->get();
 
+        // $items = Item::whereNull('out_date')
+        // 紐付いているsubcategoryのitemを取得する
+        // ->whereHas('SubCategory', function($query) use ($user) {
+        //     $query->whereIn('sub_category_id', $subCategories);
+        //     });
+        // dd($items);
+        // 関連するshop情報を含む
+        // ->with('shop')->get();
         return view('item.index', compact('items'));
     }
 
@@ -88,7 +111,14 @@ class ItemController extends Controller
     // 商品編集画面を表示 ToDo　itemのadd.blade.phpをコピーして、編集画面を作成する
     public function edit(Item $item) 
     {
-        return view('/item/itemEdit', compact('item'));
+        return view('item.itemEdit', compact('item'));
+    }
+
+    // 商品情報を更新する
+    public function update(Request $request, Item $item)
+    {
+        //ここに処理を記述
+
     }
 
     // 出庫処理
@@ -99,6 +129,8 @@ class ItemController extends Controller
         // 出庫日を今日の日付に設定
         $item->out_date = date('Y_m_d');
         $item->save();
+
+        return redirect()->back();
     }
 
 }
