@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\SubCategory;
 
 
 class CategoryController extends Controller
@@ -24,9 +25,14 @@ class CategoryController extends Controller
     public function create()
     {
         // return "This is the create method of CategoryController";
-        $categories = Category::all();
+        $categories = Category::where('family_group_id', Auth::user()->family_group_id)->get();
+        $subcategories = SubCategory::whereHas('category', function ($query) use ($categories) {
+            $query->whereIn('id', $categories->pluck('id'));
+        })->orderBy('category_id')->get();
 
-        return view('category\createCategory',compact('categories'));
+        $subcategoriesByCategory = $subcategories->groupBy('category_id');
+
+        return view('category.createCategory',compact('categories', 'subcategoriesByCategory'));
     }
 
     /**
@@ -41,16 +47,22 @@ class CategoryController extends Controller
         // ログインユーザーのfamily_group_idを取得
         $family_group_id = auth()->user()->family_group_id;
 
-        // テーブル内に同じカラムがあるかチェックして、なければcreateに進む 後で実装
-        // Rule::unique('category', 'category_name')->where('family_group_id', $family_gropu_id);
+        // 同じカテゴリがすでに存在するかチェック
+        $existingCategory = Category::where('name', $request->category_name)
+                                    ->where('family_group_id', $family_group_id)
+                                    ->first();
 
-        // カテゴリ登録
+        // もし同じカテゴリがすでに存在すればリダイレクト
+        if ($existingCategory) {
+            return redirect()->route('categories.create')->with('messege', '同じカテゴリが既に存在します。');
+        }
+        // 存在しない場合はカテゴリ登録
         Category::create([
             'name' => $request->category_name,
             'family_group_id' => $family_group_id
         ]);
 
-        return redirect()->route('categories.create');
+        return redirect()->route('categories.create')->with('messsage', 'カテゴリが登録されました。');
     }
 
     /**

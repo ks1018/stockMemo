@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SubCategory;
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
@@ -45,10 +46,10 @@ class Item extends Model
         return $this->belongsTo(SubCategory::class,"sub_category_id");
     }
 
-        // shopとのリレーション
-        public function shop()
-        {
-            return $this->belongsTo(Shop::class,'shop_id', 'id');
-        }
+    // shopとのリレーション
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class,'shop_id', 'id');
+    }
     
 }

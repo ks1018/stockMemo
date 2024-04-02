@@ -32,16 +32,32 @@ class SubCategoryController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:100',
+            'category_id' => 'required',
         ]);
 
-        // 中カテゴリ登録
+        // ログインユーザーのfamily_group_idを取得
+        $family_group_id = auth()->user()->family_group_id;
+
+        // 同じカテゴリー内で同じサブカテゴリーが存在するかチェック
+        $existingSubcategory = Subcategory::where('name', $request->name)
+                                        ->where('category_id', $request->category_id)
+                                        ->whereHas('category', function($query) use ($family_group_id) {
+                                            $query->where('family_group_id', $family_group_id);
+                                        })
+                                        ->first();
+
+        // もし同じサブカテゴリーがすでに存在すればリダイレクト
+        if ($existingSubcategory) {
+            return redirect()->route('categories.create')->with('messege', '同じ中カテゴリーが既に存在します。');
+        }
+        // 存在しない場合は中カテゴリ登録
         SubCategory::create([
             'category_id' => $request->category_id,
             'name' => $request->name,
             'is_managed' => true, // is_managedをデフォルトでtrueとして登録
         ]);
 
-        return redirect()->route('categories.create');
+        return redirect()->route('categories.create')->with('messege', '中カテゴリーが登録されました。');
     }
 
     /**

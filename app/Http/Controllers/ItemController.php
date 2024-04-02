@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\DB;
 use App\Models\Item;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -48,14 +49,6 @@ class ItemController extends Controller
             $query->whereIn('sub_category_id', $subcategory_ids)->whereNull('out_date');
         })->with('shop')->get();
 
-        // $items = Item::whereNull('out_date')
-        // 紐付いているsubcategoryのitemを取得する
-        // ->whereHas('SubCategory', function($query) use ($user) {
-        //     $query->whereIn('sub_category_id', $subCategories);
-        //     });
-        // dd($items);
-        // 関連するshop情報を含む
-        // ->with('shop')->get();
         return view('item.index', compact('items'));
     }
 
@@ -69,7 +62,9 @@ class ItemController extends Controller
             // バリデーション
             $this->validate($request, [
                 'item_name' => 'required|max:100',
+                'price' => 'required|numeric',
                 'shop_name' => 'required|max:100',
+                'sub_category_id' => 'required',
             ]);
 
             // group_idを取得
@@ -109,16 +104,53 @@ class ItemController extends Controller
     }
 
     // 商品編集画面を表示 ToDo　itemのadd.blade.phpをコピーして、編集画面を作成する
-    public function edit(Item $item) 
+    public function edit($id) 
     {
-        return view('item.itemEdit', compact('item'));
+        $item = Item::find($id);
+        $sub_category = SubCategory::find($item->sub_category_id);
+        $categories = Category::all();
+        $subCategories = SubCategory::where('category_id',$sub_category->category_id)->get();
+        $shop = Shop::find($item->shop_id);
+
+        return view('item.itemEdit', compact('item', 'sub_category', 'categories', 'subCategories', 'shop'));
     }
 
     // 商品情報を更新する
     public function update(Request $request, Item $item)
     {
-        //ここに処理を記述
+        // dd($item);
+        $this->validate($request, [
+            'item_name' => 'required|max:100',
+            'price' => 'required|numeric',
+            'shop_name' => 'required|max:100',
+            'sub_category_id' => 'required',
+        ]);
 
+            // group_idを取得
+            $family_group_id = Auth::user()->family_group_id;
+            // dd($family_group_id);
+
+            // 購入店を取得または作成
+            $shop = Shop::firstOrCreate([
+                'name' => $request->shop_name,
+                'family_group_id' => $family_group_id
+            ]);
+            // dd($request->shop_name);
+
+            // 作成した店舗情報からidを取得
+            $shop_id = $shop->id;
+            // dd($shop_id);
+
+        $item->update([
+            'name' => $request->item_name,
+            'price' => $request->price,
+            'best_before_date' => $request->best_before_date,
+            'memo' => $request->memo,
+            'shop_id' => $shop_id,
+            'sub_category_id' => $request->sub_category_id,
+        ]);
+
+        return redirect('/items');
     }
 
     // 出庫処理
@@ -131,6 +163,14 @@ class ItemController extends Controller
         $item->save();
 
         return redirect()->back();
+    }
+
+    // 削除処理
+    public function destroy($id)
+    {
+        $item = Item::find($id);
+        $item->delete();
+        return redirect()->route('items.index');
     }
 
 }

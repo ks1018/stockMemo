@@ -38,13 +38,13 @@
                             <label for="sub_category">中カテゴリ</label>
                             <select name="sub_category_id" id="sub_category" class="form-select form-control">
                             </select>
-                      
+
                         <div class="form-group">
                             <label for="item">品名</label>
                             <input type="text" class="form-control" id="item" name="item_name" placeholder="品名、銘柄">
                         </div>
                         <div class="form-group">
-                            <label for="best_before_date">賞味期限</label>
+                            <label for="best_before_date">賞味期限・使用期限</label>
                             <input type="date" class="form-control" id="best_before_date" name="best_before_date" placeholder="簡単なカレンダーで選びたい">
                         </div>
                         <div class="form-group">
