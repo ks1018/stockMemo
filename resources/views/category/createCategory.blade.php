@@ -101,7 +101,7 @@
                             @foreach($categories as $category)
                                 <div class="mb-3">
                                 <strong>{{ $category->name }}</strong>:
-                                    @if(isset($subcategoriesByCategory[$category->id]) && is_array($subcategoriesByCategory[$category->id]))
+                                    @if(isset($subcategoriesByCategory[$category->id]))
                                         @foreach($subcategoriesByCategory[$category->id] as $key => $subcategory)
                                             {{ $subcategory->name }}@if(!$loop->last) / @endif
                                         @endforeach
