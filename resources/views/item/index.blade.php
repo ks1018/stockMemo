@@ -63,6 +63,19 @@
                     </table>
                 </div>
             </div>
+
+                <!-- ページネーション -->
+                <nav aria-label="ページ送り" class="d-flex justify-content-center">
+                    <div class="row align-items-center">
+                        <div class="col-sm">
+                            {{ $items->links() }}
+                        </div>
+                        <div class="col-sm">
+                            Page {{ $items->currentPage() }} / {{ $items->lastPage() }}
+                        </div>
+                    </div>
+                </nav>
+
         </div>
     </div>
 @stop

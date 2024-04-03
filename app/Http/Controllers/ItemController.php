@@ -47,7 +47,7 @@ class ItemController extends Controller
         
         $items = Item::whereHas('SubCategory', function($query) use ($subcategory_ids) {
             $query->whereIn('sub_category_id', $subcategory_ids)->whereNull('out_date');
-        })->with('shop')->get();
+        })->with('shop')->paginate(10);
 
         return view('item.index', compact('items'));
     }
