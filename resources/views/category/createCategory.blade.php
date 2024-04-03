@@ -85,6 +85,7 @@
                                         <div class="form-group">
                                             <label for="sub_category_name">中カテゴリ名</label>
                                             <input type="text" class="form-control" id="sub_category_name" name="name">
+                                            <div class="form-text" id="sub_category_name">※管理したい項目名：例 しょうゆ　トイレットペーパー　頭痛薬など</div>
                                         </div>
                                         <input type="hidden" id="selected_category_id" name="category_id">
                                         <button type="submit" class="btn btn-primary">作成</button>
@@ -96,7 +97,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card card-secondary">
-                        <div class="card-header">既存のカテゴリ</div>
+                        <div class="card-header">既存のカテゴリ (太字：は大カテゴリ)</div>
                         <div class="card-body">
                             @foreach($categories as $category)
                                 <div class="mb-3">
