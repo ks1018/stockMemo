@@ -62,7 +62,7 @@ class ItemController extends Controller
             // バリデーション
             $this->validate($request, [
                 'item_name' => 'required|max:100',
-                'price' => 'required|numeric',
+                'price' => 'required|numeric|min:0|max:100000',
                 'shop_name' => 'required|max:100',
                 'sub_category_id' => 'required',
             ]);
@@ -121,7 +121,7 @@ class ItemController extends Controller
         // dd($item);
         $this->validate($request, [
             'item_name' => 'required|max:100',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|min:0|max:100000',
             'shop_name' => 'required|max:100',
             'sub_category_id' => 'required',
         ]);
