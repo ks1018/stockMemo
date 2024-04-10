@@ -31,6 +31,7 @@ Route::prefix('items')->group(function () {
     Route::put('/{item}', [App\Http\Controllers\ItemController::class, 'update']);
     Route::post('/stock-out/{id}', [App\Http\Controllers\ItemController::class, 'handleStockOut'])->name('items.stock-out');
     Route::delete('/{id}', [App\Http\Controllers\ItemController::class, 'destroy'])->name('item.destroy');
+    Route::get('/search', [App\Http\Controllers\ItemController::class, 'search'])->name('item.search');
 });
 
 // カテゴリ

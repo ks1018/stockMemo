@@ -307,6 +307,12 @@ return [
             'icon' => 'fas fa-plus-square',
             'icon_color' => 'primary',
         ],
+        [
+            'text' => 'ストック状況',
+            'url' => 'items/search',
+            'icon' => 'fas fa-search',
+            'icon_color' => 'primary',
+        ],
 
         // AdminLTEデフォルト
         /*

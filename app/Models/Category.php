@@ -20,4 +20,10 @@ class Category extends Model
         return $this->belongsTo(FamilyGroup::class);
     }
 
+    // sub_categoryとの連携
+    public function subcategories()
+    {
+        return $this->hasMany(SubCategory::class);
+    }
+
 }

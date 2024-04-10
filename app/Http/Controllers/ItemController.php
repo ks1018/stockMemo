@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\Item;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -49,6 +49,7 @@ class ItemController extends Controller
             $query->whereIn('sub_category_id', $subcategory_ids)->whereNull('out_date');
         })->with(['subCategory.category:id,name', 'shop'])->orderBy('sub_category_id')->paginate(10);
         // dd($items);
+
         return view('item.index', compact('items'));
     }
 
@@ -171,6 +172,30 @@ class ItemController extends Controller
         $item = Item::find($id);
         $item->delete();
         return redirect()->route('items.index');
+    }
+
+    // ストック状況検索機能
+    public function search()
+    {
+
+        $user = auth()->user();
+        // with リレーション一緒に読み込む
+        $categories = Category::where('family_group_id',$user->family_group_id)->with('subcategories.items')->get();
+        // \Log::channel('daily')->info($categories);
+        // コレクション
+        $categories = $categories->map(function ($category){
+            $category['subcategories'] = $category['subcategories']->map(function ($subcategories){
+            // \Log::channel('daily')->info($subcategories);    
+            // $outdate = $subcategories->items->pluck('out_date')->sortByDesc('out_date')->first();
+
+            // \Log::channel('daily')->info($outdate);
+            $subcategories['outDate'] = $subcategories->items->pluck('out_date')->sortByDesc('out_date')->first();    
+            return $subcategories;
+        });
+            return $category;
+        });
+
+        return view('item.search', compact('categories'));
     }
 
 }
