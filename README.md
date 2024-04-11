@@ -21,7 +21,7 @@ Laravel 10.13.5
 [設計書ページへ](https://drive.google.com/drive/folders/16VR-MBZDF1PXG6qvWrEqxeCE7tgW24Ky)
 
 ## システム閲覧
-[アプリケーションページへ](https://github.com/ks1018/stockMemo.git)
+[アプリケーションページへ](https://techis-stockmemo-ae24dc71bc86.herokuapp.com/)
 
 ### テストアカウント情報
 ```
