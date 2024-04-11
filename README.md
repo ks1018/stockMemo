@@ -1,43 +1,30 @@
-## 商品管理システム
+# ストックMemo
 
-### 環境構築手順
+## 概要
+このシステムでは、自宅にあるストック品を管理する事ができます。
+ストック品を登録し、出庫登録、または編集、削除ができます。
+ストック品は大カテゴリ、中カテゴリにより管理できます。
 
-* Gitクローン
-* .env.example をコピーして .env を作成
-* MySQLのデータベース作成（名前：item_management）
-* Macの場合 .env の DB_PASSWORD を root に修正（Windowsは修正不要）
+## 主な機能
+- ログイン・ログアウト機能
+- ストック一覧画面、編集、出庫
+- カテゴリ作成画面、大カテゴリ作成、中カテゴリ作成
+- ストック品登録
+- ストック状況
 
-    ```INI
-    DB_PASSWORD=root
-    ```
+## 開発環境
+PHP 8.2.12
+MySQL 15.1
+Laravel 10.13.5
 
-* APP_KEY生成
+## 設計書
+[設計書ページへ](https://drive.google.com/drive/folders/16VR-MBZDF1PXG6qvWrEqxeCE7tgW24Ky)
 
-    ```console
-    php artisan key:generate
-    ```
+## システム閲覧
+[アプリケーションページへ](https://github.com/ks1018/stockMemo.git)
 
-* Composerインストール
-
-    ```console
-    composer install
-    ```
-
-* フロント環境構築
-
-    ```console
-    npm ci
-    npm run build
-    ```
-
-* マイグレーション
-
-    ```console
-    php artisan migrate
-    ```
-
-* 起動
-
-    ```console
-    php artisan serve
-    ```
+### テストアカウント情報
+```
+メールアドレス : new1@example.com
+パスワード : taropass
+```
