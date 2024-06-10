@@ -18,7 +18,7 @@ MySQL 15.1
 Laravel 10.13.5
 
 ## 設計書
-[設計書ページへ](https://drive.google.com/drive/folders/16VR-MBZDF1PXG6qvWrEqxeCE7tgW24Ky)
+[設計書ページへ](https://drive.google.com/drive/folders/1SwfgvRwrNSWpCDEpnVzxQaV-YrNiXvt2?usp=sharing)
 
 ## システム閲覧
 [アプリケーションページへ](https://techis-stockmemo-ae24dc71bc86.herokuapp.com/)
